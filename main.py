@@ -1,28 +1,32 @@
 import tinyurl
+import sys
 from selenium import webdriver
-from selenium.webdriver.common.keys import Keys
+import selenium.common.exceptions
 import time
-driver = webdriver.Chrome("/Users/ayush/Dropbox/CODE/Python/VirtualENVs/ShortBox/chromedriver")
-driver.get('http://expirebox.com/')
-file_upload = driver.find_element_by_id('fileupload')
-print ("Uploading file please wait")
-file_upload.send_keys("/Users/ayush/Dropbox/CODE/ACCESS_TOKEN")
+from selenium.webdriver.common.proxy import *
+def main(file_path):
+    driver = webdriver.Chrome()
+    driver.get('http://expirebox.com/')
+    file_upload = driver.find_element_by_id('fileupload')  #finding the file upload element
+    print ("Uploading file please wait")
+    file_upload.send_keys(file_path)  #uploading file
+    while True :
+        try :
+            del_button = driver.find_element_by_xpath("//button[@class='btn btn-danger btndel']")
+            del_button.click()
+            print ("Upload Complete")
+            break
+        except selenium.common.exceptions.ElementNotVisibleException :
+            time.sleep(1)
+            pass
+    driver.switch_to_window(driver.window_handles[1])  #switching to the new tab which have links
+    del_link = driver.current_url + "?proceed=1" #getting delete file link
+    # getting download link
+    down_link = driver.find_element_by_xpath("//a[@class='btn btn-xs btn-success btn-download']").get_attribute('href')
+    #shortening urls
+    print ("Download link : " + tinyurl.create_one(down_link))
+    print ("Delete link : " + tinyurl.create_one(del_link))
 
-del_button = driver.find_element_by_xpath("//button[@class='btn btn-danger btndel']")
-time.sleep(5)
-del_button.click()
-driver.switch_to_window(driver.window_handles[1])
-del_link = driver.current_url + "?proceed=1"
-down_link = driver.find_element_by_xpath("//a[@class='btn btn-xs btn-success btn-download']").get_attribute('href')
-print ("Download link : " + tinyurl.create_one(down_link))
-print ("Delete link : " + tinyurl.create_one(del_link))
-# while True :
-#     try:
-#         main_link = driver.find_element_by_xpath("//a[@class='btn btn-md btn-primary btn-download btn-block ']")
-#         break
-#     except :
-#         print (driver.current_url)
-#         pass
-#print (main_link.get_attribute('href'))
-# print (driver.current_url)
-
+    driver.quit()
+if __name__ == "__main__":
+    main(sys.argv[1])

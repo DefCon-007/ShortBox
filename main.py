@@ -24,8 +24,9 @@ def main(file_path):
     # getting download link
     down_link = driver.find_element_by_xpath("//a[@class='btn btn-xs btn-success btn-download']").get_attribute('href')
     #shortening urls
-    print ("Download link : " + tinyurl.create_one(down_link))
-    print ("Delete link : " + tinyurl.create_one(del_link))
+    file_name = file_path.split('/')[-1]
+    print ("Download link : " + tinyurl.shorten(down_link , "link-"+file_name))
+    print ("Delete link : " + tinyurl.shorten(del_link , "del-"+file_name))
 
     driver.quit()
 if __name__ == "__main__":

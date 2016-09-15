@@ -31,7 +31,7 @@ def main(file_path):
     while True:
 	    try :
 	        print ("Download link : " + tinyurl.shorten(down_link , "SB-"+file_name))
-	        print ("Delete link : " + tinyurl.shorten(del_link , "del-SB-"+file_name))
+	        print ("Delete link : " + tinyurl.shorten(del_link , "del-"+file_name))
 	        break
 	    except:
 	    	file_name = file_name + str(count)

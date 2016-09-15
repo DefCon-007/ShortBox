@@ -24,7 +24,9 @@ def main(file_path):
     # getting download link
     down_link = driver.find_element_by_xpath("//a[@class='btn btn-xs btn-success btn-download']").get_attribute('href')
     #shortening urls
-    file_name = file_path.split('/')[-1]
+    file_name = input("Enter a link name for : tinyurl.com/abc (Leave blank to use default filename) : ")
+    if file_name is "" : 
+    	file_name = file_path.split('/')[-1]
     count = 1
     while True:
 	    try :
